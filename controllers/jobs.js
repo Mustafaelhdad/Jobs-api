@@ -1,32 +1,27 @@
-// get all jobs
+const Job = require("../models/Job");
+const { StatusCodes } = require("http-status-codes");
+const { BadRequestError, NotFoundError } = require("../errors");
+
 const getAllJobs = async (req, res) => {
-  res.send("get all jobs");
+  const jobs = await Job.find({ createdBy: req.user.userId }).sort("createdAt");
+  res.status(StatusCodes.OK).json({ jobs, count: jobs.length });
 };
 
-// get single job
 const getJob = async (req, res) => {
-  res.send("get single job");
+  res.send("Get Single Job");
 };
 
-// create a job
 const createJob = async (req, res) => {
-  res.send("create job");
+  req.body.createdBy = req.user.userId;
+  const job = await Job.createa(req.body);
+
+  res.status(StatusCodes.CREATED).json({ job });
 };
 
-// delete a job
-const deleteJob = async (req, res) => {
-  res.send("delete a job");
-};
-
-// update a job
 const updateJob = async (req, res) => {
-  res.send("update a job");
+  res.send("update job");
 };
 
-module.exports = {
-  getAllJobs,
-  getJob,
-  createJob,
-  deleteJob,
-  updateJob,
+const deleteJob = async (req, res) => {
+  res.send("delete job");
 };
